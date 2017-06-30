@@ -54,6 +54,8 @@ for o = 1:length(section)
                     case 1 % Power Stats
                         R.clearer.statpow = 1;
                         stats_dir_pow_100616(R)
+                    case 2 % DFA Stats
+                        DFA_stats_stimex_011116(R)
                 end
             end
             

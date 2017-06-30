@@ -23,9 +23,14 @@ for cond = 1:2
                 
                 FTdata.DFAAE.(R.sourcenames{srcloc}).DFAStore = DFAStore;
                 FTdata.DFAAE.(R.sourcenames{srcloc}).boxStore = squeeze(mean(mean(boxStore,3),2));
-                FTdata.DFAAE.(R.sourcenames{srcloc}).peb = reshape(pebStore(1,:,:),[],3);
+                FTdata.DFAAE.(R.sourcenames{srcloc}).peb = squeeze(pebStore(1,:,:));
                 FTdata.DFAAE.(R.sourcenames{srcloc}).varfeat = varfeat;
                 FTdata.DFAAE.(R.sourcenames{srcloc}).ARCoeff = ARCoeff;
+                
+                pebv = squeeze(pebStore(1,:,:));
+                DFAcorr = DFAStore;
+                DFAcorr(pebv<-6) = NaN;
+                FTdata.DFAAE.(R.sourcenames{srcloc}).DFAcorr = DFAcorr;
                 
             end
             clear DFAStore boxStore pebStore
@@ -42,13 +47,13 @@ x1_filt = filterEEG(x1,fsamp,lf,hf,6*fix(fsamp/lf)); % bandpass filter
 x1AE = abs(hilbert(x1_filt));
 maxFrac = 8; minBS = (1/lf)*12;
 DFAP = [fsamp minBS (length(x1AE)/maxFrac)/fsamp 50 0];
-[bmod win evi alpha] = peb_dfa_cohproj_090616(x1AE,DFAP,BF_r,0);
-if  evi < BF_r
+[bmod win evid alpha] = peb_dfa_cohproj_090616(x1AE,DFAP,BF_r,0);
+if  evid < BF_r
     rej = 1;
     %     alpha = NaN;
 else
     rej = 0;
 end
 m = ar(x1AE,1);
-A = [alpha]; B = [lf hf minBS]; C = [evi rej]; D = std(x1AE); E = getpvec(m);
+A = [alpha]; B = [lf hf minBS]; C = [evid]; D = std(x1AE); E = getpvec(m);
 end

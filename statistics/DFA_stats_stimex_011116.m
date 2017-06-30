@@ -5,14 +5,17 @@ for sub  = 1:length(R.subnames)
     for cond = 1:2
         load([R.analysispath R.pipestamp '\data\processed\' R.subnames{sub} '_OFFdrug_' R.pipestamp '_stim' R.condnames{cond} '.mat'])
         for srcloc = find(strncmp(R.sourcenames,'LFP_CONTRA',9))
-            DFA = FTdata.DFAAE.LFP_CONTRA.DFAStore';
+            DFA = FTdata.DFAAE.LFP_CONTRA.DFAcorr';
             [a b] = size(DFA);
             DFAlong = reshape(DFA',[],1);
+            
+            PEB = FTdata.DFAAE.(R.sourcenames{srcloc}).peb';
+            [a b] = size(PEB);
+            PEBlong = reshape(PEB',[],1);
+            
             [a2 b2] = size(DFAlong);
-            tabd = [repmat(sub,a2,b2) repmat(cond,a2,b2) repmat((1:size(DFA,2))',a2/size(DFA,2),b2) reshape(repmat(1:a,b,1),[],1) DFAlong];
+            tabd = [repmat(sub,a2,b2) repmat(cond,a2,b2) repmat((1:size(DFA,2))',a2/size(DFA,2),b2) reshape(repmat(1:a,b,1),[],1) DFAlong PEBlong];
             statstack = [statstack; tabd]
-            
-            
         end
     end
 end
