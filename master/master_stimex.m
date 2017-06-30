@@ -3,7 +3,7 @@ clear all; close all
 % COMMAND PROGRAM - SETS ANALYSIS PROCEDURES
 % dbstop if error
 % dbclear if error
-
+% HELLO WORLD!!!
 %% Build header to be used for analysis programs
 R = buildheader_stimex;
 % Select methods
