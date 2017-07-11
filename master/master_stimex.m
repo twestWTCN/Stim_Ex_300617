@@ -1,5 +1,6 @@
 %% STN STIMULATOR EXPERIMENTAL ANALYSIS
-clear all; close all
+% clear all; 
+close all
 % COMMAND PROGRAM - SETS ANALYSIS PROCEDURES
 % dbstop if error
 % dbclear if error
@@ -8,7 +9,7 @@ clear all; close all
 R = buildheader_stimex;
 % Select methods
 section = [1 3];    % Sections
-procs = {[6]...           % Analysis
+procs = {[3 5]...           % Analysis
     []...           % Statistics
     [1]}...     % Plotting
     ;
@@ -20,15 +21,16 @@ for o = 1:length(section)
                 switch procs{section(o)}(i)
                     %% Data Preparation
                     case 1 % Data Conversion and headmodel build - only need to do this once!
-                        %                         R.clear(1) = 0;
-                        %                         extract_continuous_loop_210616(R)
+%                         R.clear(1) = 0;
+%                         extract_continuous_loop_210616(R)
                     case 2
                         % Now read and convert to FT format
                         convertFT_260716(R)
                     case 3
                         % Preprocess Data
                         R.clear.pp = 1;
-                        preprocess_stimex_040816(R)
+                        preprocess_stimex_110717(R)
+%                         dataviewer_stimex_110717(R)
                     case 4 % Preprocesing Long Epoch
                         %                         R.clear.ppe = 0;
                         R.longE_length = 10;
@@ -36,7 +38,7 @@ for o = 1:length(section)
                         %% Spectral Analyses
                     case 5 % Spectral analysis including coherence and WPLI
                         R.spectanaly.cplot = [0 0 0]; % Plotting options
-                        spectralanalysis_stimex_270217(R)
+                        spectralanalysis_stimex_110717(R)
 %                         spectalanalysis_stimex_040816(R)
                         % - - - - - - - -
                         % Qs:

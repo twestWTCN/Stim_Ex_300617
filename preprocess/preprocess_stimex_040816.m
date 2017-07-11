@@ -9,7 +9,9 @@ hpfilt = designfilt('highpassfir','StopbandFrequency',1, ...
 for sub  = 1:length(R.subnames)
     for stfq = 1:length(R.stimfreq)
         load([R.analysispath R.pipestamp '\data\split\' R.subnames{sub} '_OFFdrug_' R.pipestamp '_stim' num2str(R.stimfreq(stfq)) 'Hz.mat'])
+        % Merge left and right stims
         
+        data_merged =  ft_appenddata(cfg, data1_resampled, data2);
         % Epoched Data
         % First epoch into segments (1s)
         cfg = [];
@@ -90,10 +92,11 @@ for sub  = 1:length(R.subnames)
         cfg.end = 5;    % TRUNCATE
         cfg.hpfilt = hpfilt;
         FTdata.cleancont = preprocess_cont_stimex_040816(cfg,sFTdata);
-        
+        FTdata.raw = sFTdata;
         FTdata.stimfreq = sFTdata.stimfreq;
-        FTdata.stimside = sFTdata.stimside;
-        
+%         FTdata.stimside = sFTdata.stimside;
+        FTdata.details = sFTdata.details;
+        mkdir([R.analysispath R.pipestamp '\data\processed\'])
         save([R.analysispath R.pipestamp '\data\processed\' R.subnames{sub} '_OFFdrug_' R.pipestamp '_stim' num2str(R.stimfreq(stfq)) 'Hz.mat'],'FTdata')
     end
 end
