@@ -35,7 +35,7 @@ for sub  = 1:length(R.subnames)
             % Downsample
             cfg = [];
             cfg.resamplefs = R.ds;
-            cfg.detrend  = 'no';
+            cfg.detrend  = 'yes';
             sFTdata = ft_resampledata(cfg, sFTdata);
             save([R.analysispath R.pipestamp '\data\split\' R.subnames{sub} '_OFFdrug_' R.pipestamp '_' sFTdata.stimside '_stim' num2str(sFTdata.stimfreq) 'Hz.mat'],'sFTdata')
         end

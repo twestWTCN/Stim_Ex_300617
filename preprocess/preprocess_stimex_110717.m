@@ -29,10 +29,10 @@ for sub  = 1:length(R.subnames)
             % Preprocess
             cfg = [];
             cfg.hpfilter  = 'yes'; % highpass
-            cfg.hpfreq = R.FOI(1);
+            cfg.hpfreq = R.pp.hpfilt;
             cfg.lpfilter  = 'yes';  % low pass
             cfg.demean = 'yes';
-            cfg.lpfreq = R.FOI(2);
+            cfg.lpfreq = R.pp.lpfilt;
             cfg.lpfilttype = 'fir';
             cfg.hpfilttype = 'fir';
             cfg.dftfilter = 'no'; % line noise filter

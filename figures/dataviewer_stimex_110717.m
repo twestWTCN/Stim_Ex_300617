@@ -1,11 +1,10 @@
 function dataviewer_stimex_110717(R)
 close all
 
-for sub  = 1:length(R.subnames)
-    for cond = 1:2
+for sub  = 3:length(R.subnames)
+    for cond = 1:length(R.condnames)
         hemin = {'L','R'};
         for side = 1:2
-            
             for scale = 1:2
                 set(0,'DefaultAxesFontSize',16)
                 set(0,'defaultlinelinewidth',1.5)
@@ -45,12 +44,12 @@ for sub  = 1:length(R.subnames)
                 set(gca,'YTickLabel',raw.label(stinds))
                 set(gcf,'Position',[229         151        1654         845])
                 % Save Figures
-                if scale == 2
-                    saveallfiguresFIL([R.analysispath R.pipestamp '\results\preprocessing\' FTdata.details.sub '_' R.condnames{cond} '_' hemin{side} '_short'],'-jpg',1,'-r200'); close all
-                else
-                    saveallfiguresFIL([R.analysispath R.pipestamp '\results\preprocessing\' FTdata.details.sub '_' R.condnames{cond} '_' hemin{side} '_long'],'-jpg',1,'-r200'); close all
-                end
-                
+%                 if scale == 2
+%                     saveallfiguresFIL([R.analysispath R.pipestamp '\results\preprocessing\' FTdata.details.sub '_' R.condnames{cond} '_' hemin{side} '_short'],'-jpg',1,'-r200'); close all
+%                 else
+%                     saveallfiguresFIL([R.analysispath R.pipestamp '\results\preprocessing\' FTdata.details.sub '_' R.condnames{cond} '_' hemin{side} '_long'],'-jpg',1,'-r200'); close all
+%                 end
+                close all
                 if scale == 1
                     %% Plot Spectra
                     set(0,'DefaultAxesFontSize',14)
@@ -59,34 +58,37 @@ for sub  = 1:length(R.subnames)
                     set(0, 'DefaultFigurePosition', [669         189        1131         705]);
                     cmap = linspecer(size(raw.trial{1},1),'qualitative');
                     figure
-                    stinds = find(strncmpi(FTdata.cleancont.label,[hemin{side} '_LFP_C'],7));
+                    stinds = find(strncmpi(FTdata.cleancont.label,[hemin{side} '_LFP_CO'],8));
                     for i = 1:length(stinds)
                         cleant = processed.trial{1}(stinds(i),:);
-                        [Pxx F] = pwelch(cleant,hanning(processed.fsample*2),[],processed.fsample*2,processed.fsample);
-                        fxA = F;
-                        fyA = Pxx./std(Pxx(F>4 & F<60));
-%                         fyA = fyA-mean(Pxx(F>4 & F<60));
-%                         fyA = Pxx; %(Pxx-mean(Pxx))./std(Pxx);
+%                         [Pxx F] = pwelch(cleant,hanning(processed.fsample*2),[],processed.fsample*2,processed.fsample);
+%                         fxA = F;
+%                         fyA = Pxx./std(Pxx(F>10 & F<40));
+                          fxA = FTdata.freqPow.freq;
+                          fyA = FTdata.freqPow.fy_norm(i,:);
+                          fyA(fxA>98 & fxA<102) = NaN;
+                          fxA(fxA>98 & fxA<102) = NaN;
+%                           fyA = fyA./std(fyA(fxA>14 & fxA<30));
                         plot(fxA,fyA,'color',cmap(i,:)); hold on
                     end
                     %
-                    xlim([0 100]); ylim([0 14]) 
+                    xlim([5 30]);% ylim([0 0.2]) 
                     xlabel('Frequency (Hz)'); ylabel('Normalised Magnitude')
                     title(['Patient ' FTdata.details.sub ' ' R.condnames{cond} ' ' hemin{side} ' side Spectral Estimate'])
                     legend(raw.label{stinds})
                     set(gcf,'Position',[838   307   962   587])
-                    l = axes;
-                    for i = 1:length(stinds)
-                        cleant = processed.trial{1}(stinds(i),:);
-                        [Pxx F] = pwelch(cleant,hanning(processed.fsample*2),[],processed.fsample*2,processed.fsample);
-                        fxA = F;
-                        fyA = Pxx./std(Pxx(F>4 & F<60));
-%                         fyA = fyA-mean(Pxx(F>4 & F<60)); %Pxx; %(Pxx-mean(Pxx))./std(Pxx);
-                        plot(fxA,fyA,'color',cmap(i,:)); hold on
-                    end
-                    xlim([5 30])
-                    set(l,'Position',[0.4382    0.4835    0.2271    0.4092])
-                    saveallfiguresFIL([R.analysispath R.pipestamp '\results\preprocessing\' FTdata.details.sub '_' R.condnames{cond} '_' hemin{side} '_spectra'],'-jpg',1,'-r200'); close all
+%                     l = axes;
+%                     for i = 1:length(stinds)
+%                         cleant = processed.trial{1}(stinds(i),:);
+%                         [Pxx F] = pwelch(cleant,hanning(processed.fsample*2),[],processed.fsample*2,processed.fsample);
+%                         fxA = F;
+%                         fyA = Pxx./std(Pxx(F>4 & F<60));
+% %                         fyA = fyA-mean(Pxx(F>4 & F<60)); %Pxx; %(Pxx-mean(Pxx))./std(Pxx);
+%                         plot(fxA,fyA,'color',cmap(i,:)); hold on
+%                     end
+%                     xlim([5 30])
+%                     set(l,'Position',[0.4382    0.4835    0.2271    0.4092])
+%                     saveallfiguresFIL([R.analysispath R.pipestamp '\results\preprocessing\' FTdata.details.sub '_' R.condnames{cond} '_' hemin{side} '_spectra'],'-jpg',1,'-r200'); close all
                     
                 end % spectra if on scale 1
             end % loop scales

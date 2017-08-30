@@ -21,7 +21,7 @@ switch sub
         details.disdur = 7;
         details.LDE = 2840;
         details.UPDRS = [43 12 14 0 10 7;
-            19 7  6  0 0  3];
+                         19 7  6  0 0  3];
         details.sub = sub;
     case 'LN_C06'
         trn = [2:5];

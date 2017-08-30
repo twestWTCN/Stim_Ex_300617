@@ -1,5 +1,5 @@
 function spectralanalysis_stimex_110717(R)
-for cond = 1:2
+for cond = 1:length(R.condnames)
     for sub  = 1:length(R.subnames)
         hemin = {'L','R'};
         for side = 1:2
@@ -53,15 +53,15 @@ for cond = 1:2
             if R.spectanaly.cplot(1) == 1
                 figure
                 subplot(1,3,1)
-                inds = find(strncmp(['LFP_STIM'], freqPow.label,3)); % Source index
+                inds = find(strncmp([hemin{side} '_LFP_STIM'], freqPow.label,3)); % Source index
                 plot(repmat(freqPow.freq,length(inds),1)',FTdata.spectanaly.spectra{1}(inds,:)');
                 title('LFP_STIM')
                 subplot(1,3,2)
-                inds = find(strncmp(['LFP_CLEAN'], freqPow.label,2)); % Source index
+                inds = find(strncmp([hemin{side} '_LFP_CLEAN'], freqPow.label,2)); % Source index
                 plot(repmat(freqPow.freq,length(inds),1)',FTdata.spectanaly.spectra{1}(inds,:)');
                 title('LFP_CLEAN')
                 subplot(1,3,3)
-                inds = find(strncmp(['LFP_CONTRA'], freqPow.label,3)); % Source index
+                inds = find(strncmp([hemin{side} '_LFP_CONTRA'], freqPow.label,3)); % Source index
                 plot(repmat(freqPow.freq,length(inds),1)',FTdata.spectanaly.spectra{1}(inds,:)');
                 title('LFP_CONTRA')
             end
@@ -91,7 +91,7 @@ for cond = 1:2
             end
             FTdata.wpli = wpli;
             
-            save([R.analysispath R.pipestamp '\data\processed\' R.subnames{sub} '_OFFdrug_' R.pipestamp '_' hemin{side} '_stim' num2str(R.stimfreq(cond)) 'Hz.mat'])
+            save([R.analysispath R.pipestamp '\data\processed\' R.subnames{sub} '_OFFdrug_' R.pipestamp '_' hemin{side} '_stim' num2str(R.stimfreq(cond)) 'Hz.mat'],'FTdata')
         end
     end
 end
